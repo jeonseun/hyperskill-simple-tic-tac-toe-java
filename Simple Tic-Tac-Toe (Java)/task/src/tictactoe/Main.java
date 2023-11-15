@@ -13,7 +13,7 @@ public class Main {
                 {' ', ' ', ' '}
         };
 
-        showField(field);
+        render(field);
 
         boolean isXTurn = true;
         int turnCount = 0;
@@ -29,23 +29,16 @@ public class Main {
                 continue;
             }
 
-            if (!isValidCoordinates(x, y)) {
+            if (!isValidCoordinates(y, x) || !isValidPosition(field, y, x)) {
                 continue;
             }
 
-            if (!isValidPosition(field, x, y)) {
-                continue;
-            }
-
-            if (isXTurn) {
-                field[y - 1][x - 1] = 'X';
-            } else {
-                field[y - 1][x - 1] = 'O';
-            }
-            turnCount++;
+            field[y - 1][x - 1] = isXTurn ? 'X' : 'O';
             isXTurn = !isXTurn;
 
-            showField(field);
+            turnCount++;
+
+            render(field);
 
             boolean isXWin;
             boolean isOWin;
@@ -67,7 +60,7 @@ public class Main {
 
     }
 
-    private static void showField(char[][] field) {
+    private static void render(char[][] field) {
         String grid = """
                 ---------
                 | %c %c %c |
@@ -83,10 +76,8 @@ public class Main {
     }
 
     private static int readUserInput(Scanner scanner) {
-        int input;
         try {
-            input = scanner.nextInt();
-            return input;
+            return scanner.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("You should enter numbers!");
             scanner.nextLine();
@@ -94,7 +85,7 @@ public class Main {
         }
     }
 
-    private static boolean isValidCoordinates(int x, int y) {
+    private static boolean isValidCoordinates(int y, int x) {
         if (y < 1 || y > 3 || x < 1 || x > 3) {
             System.out.println("Coordinates should be from 1 to 3!");
             return false;
@@ -102,7 +93,7 @@ public class Main {
         return true;
     }
 
-    private static boolean isValidPosition(char[][] field, int x, int y) {
+    private static boolean isValidPosition(char[][] field, int y, int x) {
         if (field[y - 1][x - 1] != ' ') {
             System.out.println("This cell is occupied! Choose another one!");
             return false;
